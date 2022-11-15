@@ -20,14 +20,14 @@ export function getCommand(
     throw new Error(`Command "${command}" is not support by agent "${agent}"`)
   return c.replace('{0}', args.join(' ')).trim()
 }
-
+// parse Ni 将ni命令解析成包管理命令
 export const parseNi = <Runner>((agent, args, ctx) => {
   // bun use `-d` instead of `-D`, #90
   if (agent === 'bun')
     args = args.map(i => i === '-D' ? '-d' : i)
-
+  // -g 参数在 yarn等包管理 中是全局安装
   if (args.includes('-g'))
-    return getCommand(agent, 'global', exclude(args, '-g'))
+    return getCommand(agent, 'global', exclude(args, '-g')) // 得到具体的命令
 
   if (args.includes('--frozen-if-present')) {
     args = exclude(args, '--frozen-if-present')

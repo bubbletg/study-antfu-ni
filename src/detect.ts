@@ -15,8 +15,10 @@ export interface DetectOptions {
 
 export async function detect({ autoInstall, cwd }: DetectOptions) {
   let agent: Agent | null = null
-
+  // findUp 返回所找到的第一个路径(通过尊重数组的顺序)或者未定义的路径(如果没有找到)。
+  // lockPath 是 lock 文件的路径
   const lockPath = await findUp(Object.keys(LOCKS), { cwd })
+  // packageJsonPath 是 package.json 文件的路径
   let packageJsonPath: string | undefined
 
   if (lockPath)
@@ -27,8 +29,11 @@ export async function detect({ autoInstall, cwd }: DetectOptions) {
   // read `packageManager` field in package.json
   if (packageJsonPath && fs.existsSync(packageJsonPath)) {
     try {
+      // 读取 package.json 文件 转换为 json 对象
       const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
+      // 是否有 packageManager 字段
       if (typeof pkg.packageManager === 'string') {
+        // 拿到 packageManager 的名称 和 版本号
         const [name, version] = pkg.packageManager.split('@')
         if (name === 'yarn' && parseInt(version) > 1)
           agent = 'yarn@berry'
@@ -44,6 +49,7 @@ export async function detect({ autoInstall, cwd }: DetectOptions) {
   }
 
   // detect based on lock
+  // 没有 package.json 文件 或者 没有 packageManager 字段 时候，通过 lock 文件来检测
   if (!agent && lockPath)
     agent = LOCKS[path.basename(lockPath)]
 
@@ -54,7 +60,6 @@ export async function detect({ autoInstall, cwd }: DetectOptions) {
 
       if (process.env.CI)
         process.exit(1)
-
       const link = terminalLink(agent, INSTALL_PAGE[agent])
       const { tryInstall } = await prompts({
         name: 'tryInstall',

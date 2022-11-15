@@ -7,5 +7,11 @@
       "request": "launch",
       "type": "node-terminal"
     },
+    {
+      "command": "nr dev-ni-C",
+      "name": "Run nr dev-ni-C",
+      "request": "launch",
+      "type": "node-terminal"
+    },
   ]
 }

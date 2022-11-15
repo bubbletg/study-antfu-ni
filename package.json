@@ -38,6 +38,7 @@
   "scripts": {
     "prepublishOnly": "npm run build",
     "dev": "esno src/commands/ni.ts",
+    "dev-ni-C": "esno src/commands/ni.ts -C src/commands/",
     "nr": "esno src/commands/nr.ts",
     "build": "unbuild",
     "stub": "unbuild --stub",
