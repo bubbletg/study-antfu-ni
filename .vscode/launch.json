@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "command": "nr dev",
+      "name": "Run nr dev",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+  ]
+}
